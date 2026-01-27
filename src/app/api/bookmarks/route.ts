@@ -1,0 +1,24 @@
+import { supabaseAdmin } from "@/lib/supabaseAdmin"
+import { NextResponse } from "next/server"
+
+export async function POST(req: Request) {
+  const { itemId, itemType, userId } = await req.json() // pass userId from client
+
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  }
+
+  const { error } = await supabaseAdmin
+    .from("bookmarks")
+    .insert({
+      user_id: userId,
+      item_id: itemId,
+      item_type: itemType,
+    })
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 400 })
+  }
+
+  return NextResponse.json({ success: true })
+}
