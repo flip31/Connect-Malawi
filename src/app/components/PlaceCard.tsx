@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { supabase } from "@/lib/supabaseClient"
+import PlaceActions from "./placeActions"
 
 interface PlaceCardProps {
   id: string
@@ -33,16 +34,17 @@ export default function PlaceCard({ id, name, region, description }: PlaceCardPr
   }
 
   return (
-    <div className="border border-blue-500 p-4 rounded shadow my-2 ">
+    <div className="border border-red-500 p-4 rounded-lg shadow my-2 ">
       <h2 className="font-bold font-red-500">{name}</h2>
-      <p>{region}</p>
+      <p className="text-green-300">{region}</p>
       <p>{description}</p>
       <button
-        className={`mt-2 px-4 py-2 rounded bg-red-700 ${liked ? "bg-red-500 text-white" : "bg-gray-200"}`}
+        className={`mt-2 px-4 py-2 rounded-lg text-red-900 hover:text-red-400 font-red-700 ${liked ? "bg-red-500 text-white" : "bg-gray-200"}`}
         onClick={handleLike}
       >
         {liked ? "Liked ❤️" : "Like ♡"}
       </button>
+      <div></div>
     </div>
   )
 }
