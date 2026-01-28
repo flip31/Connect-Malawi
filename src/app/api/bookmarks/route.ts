@@ -1,24 +1,36 @@
-import { supabaseAdmin } from "@/lib/supabaseAdmin"
 import { NextResponse } from "next/server"
+import { supabaseAdmin } from "@/lib/supabaseAdmin"
 
 export async function POST(req: Request) {
-  const { itemId, itemType, userId } = await req.json() // pass userId from client
+  const { placeId, userId } = await req.json()
 
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  const { error } = await supabaseAdmin
+  // Check if already bookmarked
+  const { data: existing } = await supabaseAdmin
     .from("bookmarks")
-    .insert({
-      user_id: userId,
-      item_id: itemId,
-      item_type: itemType,
-    })
+    .select("id")
+    .eq("user_id", userId)
+    .eq("place_id", placeId)
+    .single()
 
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 400 })
+  // If exists → remove (toggle off)
+  if (existing) {
+    await supabaseAdmin
+      .from("bookmarks")
+      .delete()
+      .eq("id", existing.id)
+
+    return NextResponse.json({ bookmarked: false })
   }
 
-  return NextResponse.json({ success: true })
+  // Else → insert
+  await supabaseAdmin.from("bookmarks").insert({
+    user_id: userId,
+    place_id: placeId,
+  })
+
+  return NextResponse.json({ bookmarked: true })
 }
