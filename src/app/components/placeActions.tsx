@@ -7,35 +7,37 @@ export default function PlaceActions({ placeId }: { placeId: string }) {
   const [userId, setUserId] = useState<string | null>(null)
   const [liked, setLiked] = useState(false)
   const [bookmarked, setBookmarked] = useState(false)
+useEffect(() => {
+  supabase.auth.getSession().then(async ({ data }) => {
+    const user = data.session?.user
+    if (!user) return
 
-  useEffect(() => {
-    supabase.auth.getSession().then(async ({ data }) => {
-      const user = data.session?.user
-      if (!user) return
+    setUserId(user.id)
 
-      setUserId(user.id)
+// checking likes if already existed and fetch
+    const { data: like } = await supabase
+      .from("likes")
+      .select("id")
+      .eq("user_id", user.id)
+      .eq("place_id", placeId)
+      .limit(1)
 
-      // Check LIKE
-      const { data: like } = await supabase
-        .from("likes")
-        .select("id")
-        .eq("user_id", user.id)
-        .eq("place_id", placeId)
-        .single()
+    setLiked(!!like && like.length > 0)
 
-      setLiked(!!like)
+    // checking bookmarks if already existed and fetch
+    const { data: bookmark } = await supabase
+      .from("bookmarks")
+      .select("id")
+      .eq("user_id", user.id)
+      .eq("item_id", placeId)
+      .eq("item_type", "place")
 
-      // Check BOOKMARK
-      const { data: bookmark } = await supabase
-        .from("bookmarks")
-        .select("id")
-        .eq("user_id", user.id)
-        .eq("place_id", placeId)
-        .single()
+      .limit(1)
 
-      setBookmarked(!!bookmark)
-    })
-  }, [placeId])
+    setBookmarked(!!bookmark && bookmark.length > 0)
+  })
+}, [placeId])
+
 
   const toggleBookmark = async () => {
     if (!userId) return alert("Login to save places")
