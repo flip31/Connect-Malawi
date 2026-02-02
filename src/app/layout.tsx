@@ -1,4 +1,11 @@
 import "./globals.css";
+import {Poppins} from "next/font/google"
+
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['400', '700'], // Choose your needed weights
+  variable: '--font-poppins', // Assign a CSS variable name
+})
 
 export const metadata = {
   title: "Connect Malawi",
@@ -8,7 +15,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={poppins.variable}>
       <body>{children}</body>
     </html>
   )

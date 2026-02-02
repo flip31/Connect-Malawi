@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+@theme {
+  /* Map the Next.js CSS variable to a Tailwind font utility */
+  --font-poppins: var(--font-poppins);
+}
+
+
 body{
   background-color: aliceblue;
+  font-family: var(--font-poppins), sans-serif;
 }
