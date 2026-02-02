@@ -10,7 +10,7 @@ export default function HomePage() {
 
   return (
     <>
-      {/* ================= HERO SECTION (NO SCROLL) ================= */}
+      {/* first */}
       <div className="h-screen w-full relative overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0">
@@ -37,12 +37,12 @@ export default function HomePage() {
                   className="object-contain rounded-full"
                 />
               </div>
-              <span className="text-white text-xl font-light tracking-widest">
+              <span className="text-white text-base font-light tracking-widest">
                 Connect Malawi
               </span>
             </div>
 
-            <a href="#contact" className="text-white text-lg">
+            <a href="#contact" className="text-white text-base">
               Contact Us
             </a>
           </nav>
@@ -53,7 +53,7 @@ export default function HomePage() {
               Hello Malawi
             </h1>
 
-            <p className="text-white/40 text-2xl font-light mb-8">
+            <p className="text-white/40 text-xl font-light mb-8">
               Explore, learn, and experience the <br />
               Warm Heart of Africa.
             </p>
@@ -86,12 +86,11 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* SVG WAVE */}
         <div className="absolute bottom-[0px] left-0 w-full z-20 pointer-events-none">
           <svg
             viewBox="0 0 1920 240"
             preserveAspectRatio="none"
-            className="w-full h-[400px]"
+            className="w-full h-[350px]"
           >
             <path
               d="
