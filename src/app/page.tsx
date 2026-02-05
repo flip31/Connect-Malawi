@@ -49,17 +49,17 @@ export default function HomePage() {
 
           {/* Hero Text */}
           <div className="flex-1 flex flex-col items-center justify-center text-center">
-            <h1 className="text-white text-5xl font-bold mb-4 tracking-widest">
+            <h1 data-aos='zoom-in' className="text-white text-5xl font-bold mb-4 tracking-widest">
               Hello Malawi
             </h1>
 
-            <p className="text-white/40 text-xl font-light mb-8">
+            <p data-aos='zoom-in' className="text-white/40 text-xl font-light mb-8">
               Explore, learn, and experience the <br />
               Warm Heart of Africa.
             </p>
 
             {/* Search */}
-            <div className="relative w-[420px]">
+            <div data-aos='zoom-in' className="relative w-[420px]">
               <input
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -86,7 +86,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="absolute bottom-[0px] left-0 w-full z-20 pointer-events-none">
+        {/* <div className="absolute bottom-[0px] left-0 w-full z-20 pointer-events-none">
           <svg
             viewBox="0 0 1920 240"
             preserveAspectRatio="none"
@@ -108,15 +108,15 @@ export default function HomePage() {
               fill="#E6E6E6"
             />
           </svg>
-        </div>
+        </div> */}
 
         {/* ICON LINKS */}
-        <div className="absolute bottom-0 w-full bg-#E6E6E6 z-30 py-6">
-          <div className="max-w-6xl mx-auto grid grid-cols-4 gap-8 text-center">
-            <IconLink href="/places" icon={MapPin} label="Places" />
-            <IconLink href="/history" icon={Clock} label="History" />
-            <IconLink href="/culture" icon={Shield} label="Culture" />
-            <IconLink href="/hotels" icon={Hotel} label="Hotels & Accommodation" />
+        <div className="absolute bottom-0 w-full py-6">
+          <div data-aos="fade-up" className="max-w-6xl mx-auto grid grid-cols-4 gap-8 text-center">
+            <IconLink data-aos='zoom-in-up' href="/places" icon={MapPin} label="Places" />
+            <IconLink data-aos='zoom-in-up' href="/history" icon={Clock} label="History" />
+            <IconLink data-aos='zoom-in-up' href="/culture" icon={Shield} label="Culture" />
+            <IconLink data-aos='zoom-in-up' href="/hotels" icon={Hotel} label="Hotels & Accommodation" />
           </div>
         </div>
       </div>
@@ -141,9 +141,9 @@ export default function HomePage() {
           </div>
 
           {/* Image */}
-          <div className="relative h-[420px] rounded-xl overflow-hidden shadow-lg">
+          <div className="relative h-[480px] rounded-xl overflow-hidden shadow-lg">
             <Image
-              src="/welcoming/lake-malawi.jpg"
+              src="/welcoming/mw.svg"
               alt="Lake Malawi"
               fill
               className="object-cover"
@@ -167,12 +167,12 @@ function IconLink({
 }) {
   return (
     <Link href={href} className="flex flex-col items-center group">
-      <div className="w-18 h-18 bg-white rounded-full shadow-md flex items-center justify-center mb-3 group-hover:scale-110 transition">
-        <Icon className="w-9 h-9 text-gray-800" strokeWidth={1.5} />
+      <div className="w-18 h-18 bg-white/25 backdrop-blur rounded-full shadow-md flex items-center justify-center mb-3 group-hover:scale-110 transition">
+        <Icon className="w-9 h-9 text-white" strokeWidth={1.5} />
       </div>
-      <h3 className="text-lg font-semibold text-gray-900">
+      <span className="text-lg font-semibold text-white">
         {label}
-      </h3>
+      </span>
     </Link>
   );
 }
