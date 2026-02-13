@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { MapPin, Clock, Shield, Hotel } from 'lucide-react';
+import Navigation from './components/navigation';
 
 export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -54,26 +55,8 @@ export default function HomePage() {
 
         {/* Content */}
         <div className="relative z-30 h-[70%] flex flex-col">
-          {/* Navigation */}
-          <nav className="flex items-center justify-between px-4 sm:px-6 lg:px-8 pt-4">
-            <div className="flex items-center gap-2 sm:gap-3">
-              <div className="w-10 h-10 sm:w-14 sm:h-14 relative">
-                <Image
-                  src="/welcoming/malawi-flag.webp"
-                  alt="Malawi Flag"
-                  fill
-                  className="object-contain rounded-full"
-                />
-              </div>
-              <span className="text-white text-sm sm:text-base font-light tracking-widest">
-                Connect Malawi
-              </span>
-            </div>
-
-            <a href="#contact" className="text-white text-sm sm:text-base hover:underline">
-              Contact Us
-            </a>
-          </nav>
+          {/* Navigation - UPDATED */}
+          <Navigation />
 
           {/* Hero Text */}
           <div className="flex-1 flex flex-col items-center justify-center text-center px-4">

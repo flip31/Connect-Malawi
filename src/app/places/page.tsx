@@ -1,7 +1,8 @@
 // app/places/page.tsx
 import { supabaseAdmin } from "@/lib/supabaseAdmin"
 import PlaceCard from "@/app/components/PlaceCard"
-import { Search, Filter, MapPin, Sparkles } from "lucide-react"
+import { Search, Filter, MapPin, Sparkles, User, Heart, Bookmark, LogOut } from "lucide-react"
+import AccountDropdown from "@/app/components/AccountDropdown"
 
 export const revalidate = 0
 
@@ -21,6 +22,12 @@ export default async function PlacesPage() {
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       {/* Hero Header - Malawian Flag Colors */}
       <div className="relative bg-gradient-to-r from-black via-red-700 to-green-700 text-white overflow-hidden">
+        
+        {/* Account Icon - Top Right */}
+        <div className="absolute top-6 right-6 z-50">
+          <AccountDropdown />
+        </div>
+
         {/* Decorative Background Pattern */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl"></div>
