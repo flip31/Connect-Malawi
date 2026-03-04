@@ -3,14 +3,25 @@ import { supabaseAdmin } from "@/lib/supabaseAdmin"
 import PlaceCard from "@/app/components/PlaceCard"
 import { Search, Filter, MapPin, Sparkles, User, Heart, Bookmark, LogOut } from "lucide-react"
 import AccountDropdown from "@/app/components/AccountDropdown"
+import SearchBar from "../components/searchBar"
 
 export const revalidate = 0
 
-export default async function PlacesPage() {
-  const { data: places, error } = await supabaseAdmin
+export default async function PlacesPage({searchParams}: { searchParams: Promise<{ [key: string]: string | undefined }> }) {
+  const resolvedSearchParams = await searchParams;
+  const searchTerm = resolvedSearchParams?.search;
+
+  //query for searching places by name or region
+  let query = supabaseAdmin
     .from("places")
     .select("*")
     .order('created_at', { ascending: false })
+
+    if(searchTerm){
+      query = query.or(`name.ilike.%${searchTerm}%,region.ilike.%${searchTerm}%`)
+    }
+
+const { data: places, error } = await query;
 
   if (error) {
     console.error("Error fetching places:", error)
@@ -82,15 +93,7 @@ export default async function PlacesPage() {
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
             {/* Search Bar */}
-            <div className="relative flex-1 max-w-md w-full">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search places..."
-                className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-500/20 outline-none transition-all"
-                aria-label="Search places"
-              />
-            </div>
+            <SearchBar/>
 
             {/* Filter Button - Malawian Accent */}
             <button className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-xl font-medium transition-all shadow-sm hover:shadow-md">
@@ -112,7 +115,7 @@ export default async function PlacesPage() {
                 </svg>
               </div>
               <div>
-                <p className="font-semibold text-red-800 text-lg">Failed to load places</p>
+                <p className="font-semibold text-red-800 text-lg">Check your internet</p>
                 <p className="text-red-600 mt-1">{error.message}</p>
                 <button className="mt-4 text-sm text-red-700 hover:text-red-800 font-medium underline">
                   Try again

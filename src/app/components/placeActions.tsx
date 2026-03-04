@@ -1,4 +1,3 @@
-// app/components/placeActions.tsx
 "use client"
 
 import { Heart, Bookmark, Loader2 } from "lucide-react"
@@ -29,25 +28,26 @@ export default function PlaceActions({ placeId }: PlaceActionsProps) {
       setUser(user)
 
       if (user) {
-        // Check like status
-        const { data: likeData } = await supabase
-          .from('likes')
-          .select('id')
-          .eq('user_id', user.id)
-          .eq('place_id', placeId)
-          .maybeSingle()
-        
-        setIsLiked(!!likeData)
-
-        // Check bookmark status
+        // 1. Check bookmark status (Using your item_id schema)
         const { data: bookmarkData } = await supabase
           .from('bookmarks')
           .select('id')
           .eq('user_id', user.id)
-          .eq('place_id', placeId)
+          .eq('item_id', placeId) // Changed from place_id
+          .eq('item_type', 'place') // Required by your check constraint
           .maybeSingle()
         
         setIsBookmarked(!!bookmarkData)
+
+        // Note: Make sure your 'likes' table also uses 'item_id' or update accordingly
+        const { data: likeData } = await supabase
+          .from('likes')
+          .select('id')
+          .eq('user_id', user.id)
+          .eq('item_id', placeId) 
+          .maybeSingle()
+        
+        setIsLiked(!!likeData)
       }
     } catch (error) {
       console.error("Error checking user status:", error)
@@ -56,45 +56,7 @@ export default function PlaceActions({ placeId }: PlaceActionsProps) {
     }
   }
 
-  const handleLike = async () => {
-    // Check if user is logged in
-    if (!user) {
-      router.push('/login?redirect=/places')
-      return
-    }
-
-    try {
-      setActionLoading('like')
-      
-      if (isLiked) {
-        // Unlike
-        const { error } = await supabase
-          .from('likes')
-          .delete()
-          .eq('user_id', user.id)
-          .eq('place_id', placeId)
-
-        if (error) throw error
-        setIsLiked(false)
-      } else {
-        // Like
-        const { error } = await supabase
-          .from('likes')
-          .insert({ user_id: user.id, place_id: placeId })
-
-        if (error) throw error
-        setIsLiked(true)
-      }
-    } catch (error: any) {
-      console.error("Like error:", error)
-      alert(error.message || "Failed to update like")
-    } finally {
-      setActionLoading(null)
-    }
-  }
-
   const handleBookmark = async () => {
-    // Check if user is logged in
     if (!user) {
       router.push('/login?redirect=/places')
       return
@@ -104,20 +66,23 @@ export default function PlaceActions({ placeId }: PlaceActionsProps) {
       setActionLoading('bookmark')
 
       if (isBookmarked) {
-        // Remove bookmark
         const { error } = await supabase
           .from('bookmarks')
           .delete()
           .eq('user_id', user.id)
-          .eq('place_id', placeId)
+          .eq('item_id', placeId) // Changed from place_id
+          .eq('item_type', 'place')
 
         if (error) throw error
         setIsBookmarked(false)
       } else {
-        // Add bookmark
         const { error } = await supabase
           .from('bookmarks')
-          .insert({ user_id: user.id, place_id: placeId })
+          .insert({ 
+            user_id: user.id, 
+            item_id: placeId, // Changed from place_id
+            item_type: 'place' // Required for your DB check
+          })
 
         if (error) throw error
         setIsBookmarked(true)
@@ -125,6 +90,40 @@ export default function PlaceActions({ placeId }: PlaceActionsProps) {
     } catch (error: any) {
       console.error("Bookmark error:", error)
       alert(error.message || "Failed to update bookmark")
+    } finally {
+      setActionLoading(null)
+    }
+  }
+
+  const handleLike = async () => {
+    if (!user) {
+      router.push('/login?redirect=/places')
+      return
+    }
+
+    try {
+      setActionLoading('like')
+      
+      if (isLiked) {
+        const { error } = await supabase
+          .from('likes')
+          .delete()
+          .eq('user_id', user.id)
+          .eq('item_id', placeId)
+
+        if (error) throw error
+        setIsLiked(false)
+      } else {
+        const { error } = await supabase
+          .from('likes')
+          .insert({ user_id: user.id, item_id: placeId })
+
+        if (error) throw error
+        setIsLiked(true)
+      }
+    } catch (error: any) {
+      console.error("Like error:", error)
+      alert(error.message || "Failed to update like")
     } finally {
       setActionLoading(null)
     }
@@ -144,45 +143,21 @@ export default function PlaceActions({ placeId }: PlaceActionsProps) {
       <button
         onClick={handleLike}
         disabled={actionLoading === 'like'}
-        className={`group flex items-center justify-center w-10 h-10 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
-          isLiked 
-            ? 'bg-red-50 text-red-600' 
-            : 'bg-gray-100 text-gray-600 hover:bg-red-50 hover:text-red-600'
+        className={`group flex items-center justify-center w-10 h-10 rounded-lg transition-all ${
+          isLiked ? 'bg-red-50 text-red-600' : 'bg-gray-100 text-gray-600 hover:bg-red-50 hover:text-red-600'
         }`}
-        aria-label={isLiked ? "Unlike" : "Like"}
       >
-        {actionLoading === 'like' ? (
-          <Loader2 className="w-5 h-5 animate-spin" />
-        ) : (
-          <Heart 
-            className={`w-5 h-5 transition-all ${
-              isLiked ? 'fill-red-600' : 'group-hover:scale-110'
-            }`}
-            strokeWidth={2}
-          />
-        )}
+        {actionLoading === 'like' ? <Loader2 className="w-5 h-5 animate-spin" /> : <Heart className={`w-5 h-5 ${isLiked ? 'fill-red-600' : ''}`} />}
       </button>
 
       <button
         onClick={handleBookmark}
         disabled={actionLoading === 'bookmark'}
-        className={`group flex items-center justify-center w-10 h-10 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
-          isBookmarked 
-            ? 'bg-green-50 text-green-700' 
-            : 'bg-gray-100 text-gray-600 hover:bg-green-50 hover:text-green-700'
+        className={`group flex items-center justify-center w-10 h-10 rounded-lg transition-all ${
+          isBookmarked ? 'bg-green-50 text-green-700' : 'bg-gray-100 text-gray-600 hover:bg-green-50 hover:text-green-700'
         }`}
-        aria-label={isBookmarked ? "Remove bookmark" : "Bookmark"}
       >
-        {actionLoading === 'bookmark' ? (
-          <Loader2 className="w-5 h-5 animate-spin" />
-        ) : (
-          <Bookmark 
-            className={`w-5 h-5 transition-all ${
-              isBookmarked ? 'fill-green-700' : 'group-hover:scale-110'
-            }`}
-            strokeWidth={2}
-          />
-        )}
+        {actionLoading === 'bookmark' ? <Loader2 className="w-5 h-5 animate-spin" /> : <Bookmark className={`w-5 h-5 ${isBookmarked ? 'fill-green-700' : ''}`} />}
       </button>
     </div>
   )

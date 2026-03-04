@@ -26,7 +26,7 @@ export default function PlaceCard({
   const [imageError, setImageError] = useState(false)
 
   return (
-    <div className="group bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-red-300 flex flex-col h-full">
+    <div className="group relative bg-white rounded-2xl shadow-md transition-all duration-300 overflow-hidden border border-gray-100 hover:shadow-2xl hover:border-red-500/50 flex flex-col h-full">
       {/* Image Section */}
       <div className="relative h-56 bg-gradient-to-br from-red-500 via-black to-green-600 overflow-hidden">
         {image_url && !imageError ? (
@@ -97,8 +97,7 @@ export default function PlaceCard({
         </div>
       </div>
 
-      {/* Hover Effect Border - Malawian Colors */}
-      <div className="absolute inset-0 rounded-2xl ring-2 ring-transparent group-hover:ring-red-400/50 transition-all pointer-events-none"></div>
+     
     </div>
   )
 }
