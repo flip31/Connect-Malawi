@@ -36,19 +36,19 @@ export default function Navigation() {
   }
 
   return (
-    <nav className="flex items-center justify-between px-12 py-6">
+    <nav className="flex items-center justify-between px-12 py-3">
       <div className="flex items-center gap-3">
         <div className="w-16 h-16 relative">
           <Image
             src="/welcoming/malawi-flag.webp"
             alt="Malawi Flag"
             fill
-            className="object-contain rounded-full"
+            className="object-contain rounded-[80px]"
           />
         </div>
         <a
           href="/"
-          className="text-white text-[26px] font-normal tracking-wide drop-shadow-lg"
+          className="text-white text-[22px] font-normal tracking-wide drop-shadow-lg"
         >
           Connect Malawi
         </a>

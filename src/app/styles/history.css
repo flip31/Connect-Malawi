@@ -1,0 +1,433 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   history.css — Malawi Heritage page styles
+   Import in HistoryClient.tsx: import "@/app/styles/history.css"
+───────────────────────────────────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=DM+Sans:wght@300;400;500&display=swap');
+
+/* ── Tokens ── */
+:root {
+  --mw-black:    #0f0f0f;
+  --mw-red:      #c0392b;
+  --mw-red-lt:   #e05544;
+  --mw-green:    #1a6b3a;
+  --mw-green-lt: #2d8a50;
+  --mw-cream:    #faf8f4;
+  --mw-warm:     #f0ebe1;
+  --mw-border:   #e2ddd4;
+  --mw-muted:    #8a8278;
+  --mw-text:     #1c1916;
+  --mw-serif:    'Cormorant Garamond', Georgia, serif;
+  --mw-sans:     'DM Sans', system-ui, sans-serif;
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Smooth scroll without layout thrashing ── */
+html {
+  scroll-behavior: smooth;
+  /* Prevent width changes from scrollbar appearing/disappearing */
+  scrollbar-gutter: stable;
+}
+
+body {
+  font-family: var(--mw-sans);
+  background: var(--mw-cream);
+  color: var(--mw-text);
+  /* Prevent mobile bounce that causes scroll jitter */
+  overscroll-behavior-y: none;
+}
+
+/* ─────────────────────────────────────────────
+   HERO
+─────────────────────────────────────────────── */
+.mw-hero {
+  position: relative;
+  background: var(--mw-black);
+  overflow: hidden;
+  min-height: 360px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.mw-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(192,57,43,0.5)  0%,
+    rgba(0,0,0,0.72)     55%,
+    rgba(26,107,58,0.38) 100%
+  );
+  z-index: 1;
+}
+
+/* Decorative sun — top right */
+.mw-hero__sun {
+  position: absolute;
+  top: 28px; right: 48px;
+  width: 88px; height: 88px;
+  z-index: 2;
+  opacity: 0.15;
+}
+.mw-hero__sun circle { fill: none; stroke: #fff; stroke-width: 2; }
+.mw-hero__sun line   { stroke: #fff; stroke-width: 1.5; stroke-linecap: round; }
+
+.mw-hero__account {
+  position: absolute; top: 20px; right: 20px; z-index: 10;
+}
+
+.mw-hero__content {
+  position: relative; z-index: 3;
+  max-width: 860px;
+  padding: 0 48px 56px;
+}
+
+.mw-hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--mw-red-lt);
+  margin-bottom: 16px;
+  font-family: var(--mw-sans);
+}
+.mw-hero__eyebrow span {
+  display: inline-block;
+  width: 28px; height: 1px;
+  background: var(--mw-red-lt);
+}
+
+.mw-hero__title {
+  font-family: var(--mw-serif);
+  font-size: clamp(44px, 7vw, 80px);
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+.mw-hero__title em {
+  font-style: italic;
+  color: var(--mw-red-lt);
+}
+
+.mw-hero__sub {
+  font-size: 15px;
+  color: rgba(255,255,255,0.6);
+  font-weight: 300;
+  max-width: 480px;
+  line-height: 1.75;
+}
+
+/* ── Flag stripe bar ── */
+.mw-flag-bar {
+  display: flex;
+  height: 6px;
+}
+.mw-flag-bar__s { flex: 1; }
+.mw-flag-bar__s:nth-child(1) { background: var(--mw-black); }
+.mw-flag-bar__s:nth-child(2) { background: var(--mw-red);   }
+.mw-flag-bar__s:nth-child(3) { background: var(--mw-green); }
+
+/* ─────────────────────────────────────────────
+   STICKY SEARCH
+─────────────────────────────────────────────── */
+.mw-search {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(250,248,244,0.96);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--mw-border);
+  /* GPU layer — avoids repaint on scroll */
+  will-change: transform;
+  transform: translateZ(0);
+}
+.mw-search__inner {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 12px 48px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* ─────────────────────────────────────────────
+   INTRO
+─────────────────────────────────────────────── */
+.mw-intro {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 52px 48px 20px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--mw-border);
+}
+.mw-intro__label {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--mw-red);
+  font-family: var(--mw-sans);
+  margin-bottom: 10px;
+}
+.mw-intro__heading {
+  font-family: var(--mw-serif);
+  font-size: clamp(26px, 4vw, 40px);
+  font-weight: 600;
+  color: var(--mw-text);
+  line-height: 1.2;
+}
+.mw-intro__count {
+  font-size: 12px;
+  color: var(--mw-muted);
+  white-space: nowrap;
+  padding-bottom: 4px;
+}
+
+/* ─────────────────────────────────────────────
+   TIMELINE
+─────────────────────────────────────────────── */
+.mw-timeline {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 48px 80px;
+}
+
+/* ── Row ── */
+.mw-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 320px;
+  border-bottom: 1px solid var(--mw-border);
+  position: relative;
+
+  /* Scroll-reveal: start hidden */
+  opacity: 0;
+  transform: translateY(28px);
+
+  /*
+    Use will-change so the browser composites this layer ahead of time.
+    Only applied while transitioning — remove after to free memory.
+  */
+  will-change: opacity, transform;
+  transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Once visible — stop will-change to free GPU memory */
+.mw-row--visible {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+/* Stagger delay based on position — nth-child so no JS needed */
+.mw-row:nth-child(1) { transition-delay: 0ms;   }
+.mw-row:nth-child(2) { transition-delay: 60ms;  }
+.mw-row:nth-child(3) { transition-delay: 120ms; }
+.mw-row:nth-child(4) { transition-delay: 180ms; }
+.mw-row:nth-child(n+5) { transition-delay: 0ms; } /* Reset after 4 to avoid huge waits */
+
+.mw-row--flip {
+  direction: rtl;
+}
+.mw-row--flip > * {
+  direction: ltr;
+}
+
+/* ── Image side ── */
+.mw-row__image-wrap {
+  position: relative;
+  overflow: hidden;
+  min-height: 300px;
+  background: var(--mw-black);
+}
+
+.mw-row__img {
+  object-fit: cover;
+  /* GPU-composited transform — no layout/paint on hover */
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+.mw-row:hover .mw-row__img {
+  transform: scale(1.04);
+}
+
+/* Placeholder when no image */
+.mw-row__placeholder {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    var(--mw-black) 0%,
+    var(--mw-green) 60%,
+    var(--mw-red)   100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mw-row__placeholder-sun {
+  width: 56px; height: 56px;
+  opacity: 0.18;
+}
+.mw-row__placeholder-sun circle { fill: none; stroke: #fff; stroke-width: 2; }
+.mw-row__placeholder-sun line   { stroke: #fff; stroke-width: 1.5; stroke-linecap: round; }
+
+/* Ghost year — overlaps image bottom edge like reference */
+.mw-row__year-ghost {
+  position: absolute;
+  bottom: -16px;
+  right: -4px;
+  font-family: var(--mw-serif);
+  font-size: clamp(68px, 11vw, 108px);
+  font-weight: 700;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(192,57,43,0.3);
+  line-height: 1;
+  pointer-events: none;
+  z-index: 2;
+  user-select: none;
+  letter-spacing: -0.04em;
+}
+.mw-row--flip .mw-row__year-ghost {
+  right: auto;
+  left: -4px;
+  -webkit-text-stroke-color: rgba(26,107,58,0.3);
+}
+
+/* ── Text side ── */
+.mw-row__body {
+  padding: 48px 44px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+/* Left accent line */
+.mw-row__body::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 40px; bottom: 40px;
+  width: 2px;
+  background: linear-gradient(180deg, var(--mw-red), transparent);
+}
+.mw-row--flip .mw-row__body::before {
+  left: auto; right: 0;
+  background: linear-gradient(180deg, var(--mw-green), transparent);
+}
+
+.mw-row__tag {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mw-red);
+  margin-bottom: 14px;
+  font-family: var(--mw-sans);
+}
+.mw-row--flip .mw-row__tag { color: var(--mw-green-lt); }
+
+.mw-row__title {
+  font-family: var(--mw-serif);
+  font-size: clamp(22px, 3.2vw, 32px);
+  font-weight: 600;
+  color: var(--mw-text);
+  line-height: 1.2;
+  margin-bottom: 16px;
+  letter-spacing: -0.01em;
+}
+
+.mw-row__text {
+  font-size: 14px;
+  line-height: 1.85;
+  color: var(--mw-muted);
+  font-weight: 300;
+  max-width: 360px;
+}
+
+/* ─────────────────────────────────────────────
+   EMPTY STATE
+─────────────────────────────────────────────── */
+.mw-empty {
+  text-align: center;
+  padding: 100px 48px;
+  color: var(--mw-muted);
+}
+.mw-empty__icon {
+  width: 44px; height: 44px;
+  margin: 0 auto 20px;
+  opacity: 0.25;
+  display: block;
+}
+.mw-empty__text {
+  font-family: var(--mw-serif);
+  font-size: 22px;
+  color: var(--mw-text);
+  margin-bottom: 8px;
+}
+
+/* ─────────────────────────────────────────────
+   FOOTER
+─────────────────────────────────────────────── */
+.mw-footer {
+  background: var(--mw-black);
+  color: rgba(255,255,255,0.45);
+  text-align: center;
+  padding: 28px;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  font-family: var(--mw-sans);
+}
+.mw-footer strong { color: var(--mw-red-lt); }
+
+/* ─────────────────────────────────────────────
+   RESPONSIVE — mobile
+─────────────────────────────────────────────── */
+@media (max-width: 720px) {
+  .mw-hero__content  { padding: 0 20px 44px; }
+  .mw-hero__sun      { display: none; }
+  .mw-search__inner  { padding: 12px 20px; }
+  .mw-intro          { padding: 36px 20px 16px; }
+  .mw-timeline       { padding: 0 20px 60px; }
+
+  /* Stack image above text on mobile */
+  .mw-row {
+    grid-template-columns: 1fr;
+    /* Cancel RTL flip on mobile — always image-top */
+    direction: ltr !important;
+  }
+  .mw-row__image-wrap { min-height: 220px; }
+  .mw-row__body {
+    padding: 32px 20px 40px;
+  }
+  .mw-row__body::before {
+    top: 20px; bottom: 20px;
+  }
+  .mw-row__year-ghost {
+    font-size: 56px;
+    bottom: -10px;
+    right: 8px;
+  }
+  .mw-row--flip .mw-row__year-ghost {
+    left: auto;
+    right: 8px;
+  }
+  .mw-row__text {
+    max-width: 100%;
+  }
+}
